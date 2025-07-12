@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo}">Erro</title>
+    <link rel="stylesheet" th:href="@{/css/estiloPrincipal.css}">
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f7f6;">
+<div class="index-container" style="text-align: center;">
+    <h1 style="color: #dc3545;" th:text="${titulo}">Ocorreu um Erro</h1>
+    <p th:text="${mensagem}">Lamentamos, mas ocorreu um erro inesperado.</p>
+    <div class="form-buttons" style="text-align: center; margin-top: 30px;">
+        <a th:href="@{/}" class="btn btn-primary" th:text="#{error.button.back_home}">Voltar à Página Inicial</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{admin/layout :: layout(
+    pageTitle=(${usuario.id == null || usuario.id == 0} ? #{form.user.new_title} : #{form.user.edit_title}),
+    currentPage='usuarios',
+    content=~{:: .main-content}
+)}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1 th:text="${usuario.id == null || usuario.id == 0} ? #{form.user.header_new} : #{form.user.header_edit}"></h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div class="form-container">
+            <form action="#" th:action="@{/admin/usuarios/salvar}" th:object="${usuario}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-group">
+                    <label for="nome" th:text="#{form.user.name}">Nome:</label>
+                    <input type="text" th:field="*{nome}" id="nome" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" th:text="#{form.user.email}">Email:</label>
+                    <input type="email" th:field="*{email}" id="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha" th:text="#{form.user.new_password}">Nova Senha (deixe em branco para não alterar):</label>
+                    <input type="password" th:field="*{senha}" id="senha" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="tipoPerfil" th:text="#{form.user.profile}">Perfil:</label>
+                    <select th:field="*{tipoPerfil}" id="tipoPerfil" class="form-control" required>
+                        <option value="" th:text="#{form.user.select_profile}">Selecione um Perfil</option>
+                        <option value="ADMINISTRADOR" th:text="#{form.user.profile_admin}">Administrador</option>
+                        <option value="TESTADOR" th:text="#{form.user.profile_tester}">Testador</option>
+                    </select>
+                </div>
+                <div class="form-buttons">
+                    <a th:href="@{/admin/usuarios}" class="btn btn-secondary" th:text="#{common.button.cancel}">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" th:text="#{common.button.save}">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

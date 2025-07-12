@@ -1,0 +1,362 @@
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fdfcff;
+    color: #444;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a {
+    color: #e570b7;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.page-container {
+    display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    width: 250px;
+    background: linear-gradient(to bottom, #f2e6f8, #ffffff);
+    color: #5a5a5a;
+    padding: 20px;
+    border-right: 2px solid #e6d8ee;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    border-radius: 0 10px 10px 0;
+}
+
+.sidebar h2 {
+    font-size: 1.5em;
+    text-align: center;
+    color: #e570b7;
+    margin-bottom: 20px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li a {
+    display: block;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    background-color: #f9f0fa;
+    color: #444;
+    transition: background 0.3s;
+}
+
+.sidebar nav ul li a:hover,
+.sidebar nav ul li a.active {
+    background-color: #e570b7;
+    color: white;
+}
+
+.sidebar .user-info {
+    margin-top: 30px;
+    font-size: 0.85em;
+    color: #777;
+    border-top: 1px dashed #ccc;
+    padding-top: 15px;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px;
+    background-color: #ffffff;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px dotted #e6d8ee;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #73bdf4;
+    font-size: 2em;
+    margin: 0;
+}
+
+.logout-btn {
+    background-color: #ff7272;
+    color: white !important;
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-weight: bold;
+    transition: background 0.3s;
+    text-decoration: none !important;
+}
+.logout-btn:hover {
+    background-color: #e05252;
+}
+
+.welcome-message {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.dashboard-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.widget {
+    background-color: #fdfcff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e6d8ee;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.widget h3 {
+    margin-top: 0;
+    color: #e570b7;
+}
+
+.widget ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.widget ul li {
+    margin-bottom: 8px;
+}
+
+.widget ul li a {
+    color: #73bdf4;
+}
+
+.widget ul li a:hover {
+    text-decoration: underline;
+}
+
+.mensagem {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+}
+
+.mensagem-sucesso {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.mensagem-erro {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.form-container {
+    width: 600px;
+    margin: 30px auto;
+    padding: 30px 40px;
+    border: 1px solid #e6d8ee;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #e570b7;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.form-buttons {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+
+.btn-primary {
+    background-color: #73bdf4;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #529dd4;
+}
+
+.btn-secondary {
+    background-color: #e570b7;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #c85a9d;
+}
+
+.btn-danger {
+    background-color: #ff7272;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #e05252;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 0.95em;
+}
+
+table th, table td {
+    border: 1px solid #e6d8ee;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+table th {
+    background-color: #f2e6f8;
+    font-weight: bold;
+    color: #444;
+}
+
+table tr:nth-child(even) {
+    background-color: #fcf7ff;
+}
+
+.index-container {
+    background-color: #ffffff;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+.index-container h1 {
+    color: #e570b7;
+    font-size: 2.8em;
+    margin-bottom: 15px;
+}
+
+.index-container p {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.lang-switcher {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.lang-btn {
+    background-color: #f2e6f8;
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: #444;
+    border: 1px solid #ddd;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+    background-color: #e570b7;
+    color: white;
+}
+
+.lang-btn.active-lang {
+    background-color: #73bdf4;
+    color: white;
+    pointer-events: none;
+}
+
+.footer {
+    text-align: center;
+    padding: 25px 20px;
+    background-color: #f2e6f8;
+    color: #a67ab7;
+    font-size: 0.9em;
+    margin-top: auto;
+    border-top: 2px dotted #e6d8ee;
+}
+
+/* Botão estilo Orkut */
+.orkut-btn {
+    background-color: #e570b7;
+    color: white;
+    display: block;
+    width: 100%;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 12px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+}
+
+.orkut-btn:hover {
+    background-color: #c85a9d;
+    transform: translateY(-2px);
+}
+
+/* Lista de ações em blocos */
+.action-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

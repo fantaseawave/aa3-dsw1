@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{testador/layout :: layout(pageTitle=#{bug.list.title}, currentPage='sessoes', content=~{:: .main-content})}">
+    <div class="main-content">
+        <header class="header">
+            <h1 class="testador-title" th:text="#{bug.list.header(${sessao.id})}">Bugs da Sessão</h1>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <table th:if="${!listaBugs.isEmpty()}">
+            <thead>
+            <tr>
+                <th th:text="#{admin.table.id}">ID</th>
+                <th th:text="#{admin.table.description}">Descrição</th>
+                <th th:text="#{bug.table.severity}">Severidade</th>
+                <th th:text="#{bug.table.report_date}">Data do Registro</th>
+                <th th:text="#{common.actions}">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="bug : ${listaBugs}">
+                <td th:text="${bug.id}">1</td>
+                <td th:text="${bug.descricao}">Descrição do bug...</td>
+                <td th:text="${bug.severidade}">ALTA</td>
+                <td th:text="${#dates.format(bug.dataRegistro, 'dd/MM/yyyy HH:mm')}">Data</td>
+                <td class="actions">
+                    <a href="#" class="btn btn-primary" th:text="#{common.button.details}">Detalhes</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${listaBugs.isEmpty()}" style="text-align: center; margin-top: 20px;">
+            <p th:text="#{bug.list.no_bugs}">Nenhum bug foi registrado para esta sessão.</p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a th:href="@{/testador/sessoes}" class="btn btn-secondary" th:text="#{common.button.back_to_sessions}">Voltar para Sessões</a>
+        </div>
+    </div>
+</div>
+</html>

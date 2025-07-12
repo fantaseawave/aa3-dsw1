@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(pageTitle, currentPage, content)">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Painel do Testador</title>
+    <link rel="stylesheet" th:href="@{/css/estiloPrincipal.css}">
+</head>
+<body>
+<div class="page-container">
+    <div class="sidebar testador-sidebar">
+        <h2 th:text="#{tester.sidebar.title}">Testador</h2>
+        <nav>
+            <ul>
+                <li><a th:href="@{/testador/dashboard}" th:classappend="${currentPage == 'dashboard'} ? 'active' : ''" th:text="#{tester.sidebar.dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/testador/projetos}" th:classappend="${currentPage == 'projetos'} ? 'active' : ''" th:text="#{tester.sidebar.my_projects}">Meus Projetos</a></li>
+                <li><a th:href="@{/testador/sessoes}" th:classappend="${currentPage == 'sessoes'} ? 'active' : ''" th:text="#{tester.sidebar.my_sessions}">Minhas Sessões</a></li>
+                <li><a th:href="@{/testador/estrategias}" th:classappend="${currentPage == 'estrategias'} ? 'active' : ''" th:text="#{tester.sidebar.strategies}">Estratégias</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <p><span th:text="#{user.info.logged_in_as}"></span>: <strong sec:authentication="name"></strong></p>
+            <p><span th:text="#{user.info.profile}"></span>: <span th:text="${#authentication.getAuthorities()}"></span></p>
+            <div class="lang-switcher" style="margin-top: 10px; font-size: 0.9em;">
+                <a th:href="@{?lang=pt_BR}" th:classappend="${#locale.language == 'pt'} ? 'active-lang' : ''">🇧🇷 Português</a>
+                <span style="color: #4b5f71;">|</span>
+                <a th:href="@{?lang=en_US}" th:classappend="${#locale.language == 'en'} ? 'active-lang' : ''">🇺🇸 English</a>
+            </div>
+        </div>
+    </div>
+    <div th:replace="${content}">
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="listaEstrategias">
+    <div th:each="estrategia : ${listaEstrategias}" class="widget" style="margin-bottom: 20px;">
+        <h3 th:text="${estrategia.nome}">Nome da Estratégia</h3>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="flex-grow: 1; min-width: 300px;">
+                <p><strong>Descrição:</strong> <span th:text="${estrategia.descricao}"></span></p>
+                <p th:if="${estrategia.exemplos}"><strong>Exemplos:</strong> <span th:text="${estrategia.exemplos}"></span></p>
+                <p th:if="${estrategia.dicas}"><strong>Dicas:</strong> <span th:text="${estrategia.dicas}"></span></p>
+            </div>
+            <div th:if="${estrategia.imagemUrl != null}" style="flex-shrink: 0; margin: auto;">
+                <img th:src="@{${estrategia.imagemUrl}}" alt="Imagem da Estratégia" style="max-width: 250px; height: auto; border-radius: 5px;"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

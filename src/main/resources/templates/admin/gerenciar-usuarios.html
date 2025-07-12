@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{admin/layout :: layout(pageTitle=#{admin.users.title}, currentPage='usuarios', content=~{:: .main-content})}">
+  <div class="main-content">
+
+    <header class="header">
+      <h1 th:text="#{admin.users.title}">Gerenciamento de Usuários</h1>
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+      </form>
+    </header>
+
+    <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
+    <div th:if="${mensagemErro}" class="mensagem mensagem-erro" th:text="${mensagemErro}"></div>
+
+    <div class="form-buttons" style="text-align: left; margin-bottom: 20px; margin-left: 0;">
+      <a th:href="@{/admin/usuarios/novo}" class="btn btn-primary" th:text="#{admin.users.new}">Novo Usuário</a>
+    </div>
+    <table>
+      <thead>
+      <tr>
+        <th th:text="#{admin.table.id}">ID</th>
+        <th th:text="#{admin.table.name}">Nome</th>
+        <th th:text="#{admin.table.email}">Email</th>
+        <th th:text="#{admin.table.profile}">Perfil</th>
+        <th th:text="#{common.actions}">Ações</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="usuario : ${listaUsuarios}">
+        <td th:text="${usuario.id}">1</td>
+        <td th:text="${usuario.nome}">Nome do Usuário</td>
+        <td th:text="${usuario.email}">email@exemplo.com</td>
+        <td th:text="${usuario.tipoPerfil}">ADMINISTRADOR</td>
+        <td class="actions">
+          <a th:href="@{/admin/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-warning" th:text="#{common.button.edit}">Editar</a>
+          <a th:href="@{/admin/usuarios/excluir/{id}(id=${usuario.id})}" class="btn btn-danger"
+             th:onclick="'return confirm(\'' + #{common.confirm_delete} + '\');'" th:text="#{common.button.delete}">Excluir</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</html>

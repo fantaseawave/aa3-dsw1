@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{admin/layout :: layout(pageTitle=#{admin.projects.title}, currentPage='projetos', content=~{:: .main-content})}">
+    <div class="main-content">
+        <header class="header">
+            <h1 th:text="#{admin.projects.title}">Gerenciamento de Projetos</h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
+        <div th:if="${mensagemErro}" class="mensagem mensagem-erro" th:text="${mensagemErro}"></div>
+
+        <div class="form-buttons" style="text-align: left; margin-bottom: 20px; margin-left: 0;">
+            <a th:href="@{/admin/projetos/novo}" class="btn btn-primary" th:text="#{admin.projects.new}">Novo Projeto</a>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{admin.table.id}">ID</th>
+                <th>
+                    <a th:href="@{'/admin/projetos?sortField=nome&sortDir=' + ${sortField == 'nome' ? reverseSortDir : 'asc'}}" th:text="#{admin.table.name}">Nome</a>
+                </th>
+                <th th:text="#{admin.table.description}">Descrição</th>
+                <th>
+                    <a th:href="@{'/admin/projetos?sortField=dataCriacao&sortDir=' + ${sortField == 'dataCriacao' ? reverseSortDir : 'asc'}}" th:text="#{admin.table.creation_date}">Data de Criação</a>
+                </th>
+                <th th:text="#{common.actions}">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="projeto : ${listaProjetos}">
+                <td th:text="${projeto.id}">1</td>
+                <td th:text="${projeto.nome}">Nome do Projeto</td>
+                <td th:text="${#strings.abbreviate(projeto.descricao, 100)}">Descrição do projeto...</td>
+                <td th:text="${#dates.format(projeto.dataCriacao, 'dd/MM/yyyy HH:mm')}">01/01/2025 10:00</td>
+                <td class="actions">
+                    <a th:href="@{/admin/projetos/editar/{id}(id=${projeto.id})}" class="btn btn-warning" th:text="#{common.button.edit}">Editar</a>
+                    <a th:href="@{/admin/projetos/{id}/membros(id=${projeto.id})}" class="btn btn-primary" th:text="#{admin.sidebar.manage_users}">Gerir Membros</a>
+                    <a th:href="@{/admin/projetos/{id}/sessoes(id=${projeto.id})}" class="btn btn-secondary" th:text="#{tester.projects.action.view_sessions}">Ver Sessões</a>
+                    <a th:href="@{/admin/projetos/excluir/{id}(id=${projeto.id})}" class="btn btn-danger"
+                       th:onclick="'return confirm(\'' + #{common.confirm_delete} + '\');'" th:text="#{common.button.delete}">Excluir</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{admin/layout :: layout(
+    pageTitle=(${estrategia.id == null || estrategia.id == 0} ? #{form.strategy.new_title} : #{form.strategy.edit_title}),
+    currentPage='estrategias',
+    content=~{:: .main-content}
+)}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1 th:text="${estrategia.id == null || estrategia.id == 0} ? #{form.strategy.header_new} : #{form.strategy.header_edit}"></h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div class="form-container">
+            <form action="#" th:action="@{/admin/estrategias/salvar}" th:object="${estrategia}" method="post" enctype="multipart/form-data">
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{imagemUrl}" />
+
+                <div class="form-group">
+                    <label for="nome" th:text="#{form.strategy.name}">Nome da Estratégia:</label>
+                    <input type="text" th:field="*{nome}" id="nome" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="descricao" th:text="#{form.strategy.description}">Descrição:</label>
+                    <textarea th:field="*{descricao}" id="descricao" class="form-control" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="exemplos" th:text="#{form.strategy.examples}">Exemplos:</label>
+                    <textarea th:field="*{exemplos}" id="exemplos" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="dicas" th:text="#{form.strategy.tips}">Dicas:</label>
+                    <textarea th:field="*{dicas}" id="dicas" class="form-control" rows="5"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="imagemFile" th:text="#{form.strategy.image}">Imagem (deixe em branco para não alterar):</label>
+                    <input type="file" name="imagemFile" id="imagemFile" class="form-control">
+                    <div th:if="${estrategia.imagemUrl != null}" style="margin-top: 10px;">
+                        <p th:text="#{form.strategy.image_current}">Imagem Atual:</p>
+                        <img th:src="@{${estrategia.imagemUrl}}" alt="Imagem da Estratégia" style="max-width: 200px; height: auto;"/>
+                    </div>
+                </div>
+
+                <div class="form-buttons">
+                    <a th:href="@{/admin/estrategias}" class="btn btn-secondary" th:text="#{common.button.cancel}">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" th:text="#{common.button.save}">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

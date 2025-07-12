@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{testador/layout :: layout(pageTitle=#{tester.projects.title}, currentPage='projetos', content=~{:: .main-content})}">
+    <div class="main-content">
+        <header class="header">
+            <h1 class="testador-title" th:text="#{tester.projects.title}">Meus Projetos</h1>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div th:if="${listaProjetos.isEmpty()}">
+            <p th:text="#{tester.projects.no_projects}">Você ainda não foi associado a nenhum projeto.</p>
+        </div>
+
+        <table th:if="${!listaProjetos.isEmpty()}">
+            <thead>
+            <tr>
+                <th th:text="#{admin.table.id}">ID</th>
+                <th th:text="#{admin.table.name}">Nome</th>
+                <th th:text="#{admin.table.description}">Descrição</th>
+                <th th:text="#{common.actions}">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="projeto : ${listaProjetos}">
+                <td th:text="${projeto.id}">1</td>
+                <td th:text="${projeto.nome}">Nome do Projeto</td>
+                <td th:text="${#strings.abbreviate(projeto.descricao, 150)}">Descrição do projeto...</td>
+                <td class="actions">
+                    <a href="#" class="btn btn-primary" th:text="#{tester.projects.action.view_sessions}">Ver Sessões</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</html>

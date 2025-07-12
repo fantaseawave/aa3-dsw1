@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{login.title}">Login - Game Tester System</title>
+    <link rel="stylesheet" th:href="@{/css/estiloPrincipal.css}">
+</head>
+<body>
+<div class="form-container">
+    <h1 th:text="#{login.header}">Login</h1>
+    <div th:if="${param.error}" class="mensagem-erro" th:text="#{login.error.invalid}">
+    </div>
+    <div th:if="${param.logout}" class="mensagem-sucesso" th:text="#{login.success.logout}">
+    </div>
+
+    <form th:action="@{/login}" method="post">
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div class="form-group">
+            <label for="username" th:text="#{login.label.email}">Email:</label>
+            <input type="email" id="username" name="username" class="form-control" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="password" th:text="#{login.label.password}">Senha:</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary" th:text="#{login.button.signin}">Entrar</button>
+        </div>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a th:href="@{/}" style="margin-right: 15px;" th:text="#{login.link.back_home}">Voltar para a Página Inicial</a>
+        <a th:href="@{/estrategias}" th:text="#{login.link.view_strategies}">Visualizar Estratégias</a>
+    </div>
+
+</div>
+</body>
+</html>

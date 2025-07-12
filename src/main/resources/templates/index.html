@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{home.welcome.title}">Bem-vindo ao Game Tester System</title>
+    <link rel="stylesheet" th:href="@{/css/estiloPrincipal.css}">
+    <style>
+        .lang-switcher {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            color: #333;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-btn:hover {
+            background-color: #d0d0d0;
+            transform: scale(1.05);
+        }
+
+        .active-lang {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+<div class="index-container" style="text-align: center;">
+    <h1 th:text="#{home.welcome.title}">Game Tester System</h1>
+    <p th:text="#{home.welcome.message}">Bem-vindo ao sistema de gerenciamento de testes de jogos.</p>
+
+    <div class="form-buttons" style="text-align: center; margin-top: 30px;">
+        <a th:href="@{/estrategias}" class="btn btn-secondary" th:text="#{home.button.view_strategies}">Ver Estratégias</a>
+        <a th:href="@{/login}" class="btn btn-primary" th:text="#{home.button.login}">Fazer Login</a>
+    </div>
+
+    <div class="lang-switcher">
+        <a th:href="@{?lang=pt_BR}" class="lang-btn" th:classappend="${#locale.language == 'pt'} ? 'active-lang'">
+            🇧🇷 <span>Português</span>
+        </a>
+        <a th:href="@{?lang=en_US}" class="lang-btn" th:classappend="${#locale.language == 'en'} ? 'active-lang'">
+            🇺🇸 <span>English</span>
+        </a>
+    </div>
+</div>
+</body>
+</html>

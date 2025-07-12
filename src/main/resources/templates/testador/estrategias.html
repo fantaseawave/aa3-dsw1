@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{testador/layout :: layout(pageTitle=#{tester.strategies.title}, currentPage='estrategias', content=~{:: .main-content})}">
+    <div class="main-content">
+        <header class="header">
+            <h1 class="testador-title" th:text="#{tester.strategies.title}">Estratégias de Teste</h1>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div th:replace="~{fragments/lista-estrategias-fragmento :: listaEstrategias}">
+        </div>
+    </div>
+</div>
+</html>

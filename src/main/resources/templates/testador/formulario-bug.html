@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{testador/layout :: layout(
+    pageTitle=#{bug.list.title},
+    currentPage='sessoes',
+    content=~{:: .main-content}
+)}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1 class="testador-title" th:text="#{form.bug.new_title(${bug.sessaoTeste.id})}"></h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div class="form-container">
+            <form action="#" th:action="@{/testador/sessoes/{sessaoId}/bugs/salvar(sessaoId=${bug.sessaoTeste.id})}" th:object="${bug}" method="post">
+                <input type="hidden" th:field="*{sessaoTeste}" />
+
+                <div class="form-group">
+                    <label for="descricao" th:text="#{form.bug.description}">Descrição do Bug:</label>
+                    <textarea th:field="*{descricao}" id="descricao" class="form-control" rows="5" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="severidade" th:text="#{form.bug.severity}">Severidade:</label>
+                    <select th:field="*{severidade}" id="severidade" class="form-control" required>
+                        <option value="" th:text="#{form.bug.select_severity}">Selecione a Severidade</option>
+                        <option value="BAIXA" th:text="#{form.bug.severity_low}">Baixa</option>
+                        <option value="MEDIA" th:text="#{form.bug.severity_medium}">Média</option>
+                        <option value="ALTA" th:text="#{form.bug.severity_high}">Alta</option>
+                        <option value="CRITICA" th:text="#{form.bug.severity_critical}">Crítica</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="screenshotUrl" th:text="#{form.bug.screenshot}">URL da Screenshot (Opcional):</label>
+                    <input type="text" th:field="*{screenshotUrl}" id="screenshotUrl" class="form-control">
+                </div>
+
+                <div class="form-buttons">
+                    <a th:href="@{/testador/sessoes}" class="btn btn-secondary" th:text="#{common.button.cancel}">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" th:text="#{form.button.register_bug}">Registrar Bug</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(pageTitle, currentPage, content)">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Painel de Administração</title>
+    <link rel="stylesheet" th:href="@{/css/estiloPrincipal.css}">
+</head>
+<body>
+<div class="page-container">
+    <div class="sidebar">
+        <h2 th:text="#{admin.sidebar.title}">Admin</h2>
+        <nav>
+            <ul>
+                <li><a th:href="@{/admin/dashboard}" th:classappend="${currentPage == 'dashboard'} ? 'active'" th:text="#{admin.sidebar.dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/admin/usuarios}" th:classappend="${currentPage == 'usuarios'} ? 'active'" th:text="#{admin.sidebar.manage_users}">Gerenciar Usuários</a></li>
+                <li><a th:href="@{/admin/projetos}" th:classappend="${currentPage == 'projetos'} ? 'active'" th:text="#{admin.sidebar.manage_projects}">Gerenciar Projetos</a></li>
+                <li><a th:href="@{/admin/estrategias}" th:classappend="${currentPage == 'estrategias'} ? 'active'" th:text="#{admin.sidebar.manage_strategies}">Gerenciar Estratégias</a></li>
+                <li><a th:href="@{/admin/sessoes}" th:classappend="${currentPage == 'sessoes'} ? 'active'" th:text="#{admin.sidebar.manage_sessions}">Gerenciar Sessões</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <p><span th:text="#{user.info.logged_in_as}"></span>: <strong sec:authentication="name"></strong></p>
+            <p><span th:text="#{user.info.profile}"></span>: <span th:text="${#authentication.getAuthorities()}"></span></p>
+            <div class="lang-switcher" style="margin-top: 10px; font-size: 0.9em;">
+                <a th:href="@{?lang=pt_BR}" th:classappend="${#locale.language == 'pt'} ? 'active-lang' : ''">🇧🇷 Português</a>
+                <span style="color: #495057;">|</span>
+                <a th:href="@{?lang=en_US}" th:classappend="${#locale.language == 'en'} ? 'active-lang' : ''">🇺🇸 English</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="${content}">
+    </div>
+
+</div>
+</body>
+</html>

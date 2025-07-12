@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{admin/layout :: layout(pageTitle='Gerenciar Membros do Projeto', currentPage='projetos', content=~{:: .main-content})}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1>Gerenciar Membros: <span th:text="${projeto.nome}"></span></h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </header>
+
+        <div class="form-container" style="max-width: none; margin: 20px 0;">
+            <h3>Adicionar Novo Membro</h3>
+            <form th:action="@{/admin/projetos/adicionarMembro}" method="post">
+                <input type="hidden" name="projetoId" th:value="${projeto.id}" />
+                <div class="form-group">
+                    <label for="usuarioId">Selecione um Usuário para Adicionar:</label>
+                    <select id="usuarioId" name="usuarioId" class="form-control" required>
+                        <option value="">-- Usuários Disponíveis --</option>
+                        <option th:each="usuario : ${usuariosDisponiveis}"
+                                th:value="${usuario.id}"
+                                th:text="${usuario.nome + ' (' + usuario.email + ')'}"></option>
+                    </select>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Adicionar Membro</button>
+                </div>
+            </form>
+        </div>
+
+        <h3>Membros Atuais</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Ação</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="membro : ${membrosAtuais}">
+                <td th:text="${membro.id}">1</td>
+                <td th:text="${membro.nome}">Nome do Membro</td>
+                <td th:text="${membro.email}">email@membro.com</td>
+                <td class="actions">
+                    <form th:action="@{/admin/projetos/removerMembro}" method="post" style="display:inline;">
+                        <input type="hidden" name="projetoId" th:value="${projeto.id}" />
+                        <input type="hidden" name="usuarioId" th:value="${membro.id}" />
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Tem certeza que deseja remover este membro?');">Remover</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${membrosAtuais.isEmpty()}">
+                <td colspan="4" style="text-align: center;">Nenhum membro neste projeto.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/admin/projetos}" class="btn btn-secondary">Voltar para a Lista de Projetos</a>
+    </div>
+</div>
+</html>

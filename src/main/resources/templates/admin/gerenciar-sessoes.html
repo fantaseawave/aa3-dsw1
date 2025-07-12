@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{admin/layout :: layout(pageTitle='Sessões do Projeto', currentPage='projetos', content=~{:: .main-content})}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1>Sessões do Projeto: <span th:text="${projeto.nome}"></span></h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </header>
+
+        <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
+        <div th:if="${mensagemErro}" class="mensagem mensagem-erro" th:text="${mensagemErro}"></div>
+
+        <table th:if="${!listaSessoes.isEmpty()}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Testador</th>
+                <th>Estratégia</th>
+                <th>Status</th>
+                <th>Data Criação</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sessao : ${listaSessoes}">
+                <td th:text="${sessao.id}">1</td>
+                <td th:text="${sessao.testador.nome}">Nome do Testador</td>
+                <td th:text="${sessao.estrategia.nome}">Nome da Estratégia</td>
+                <td>
+                    <span th:text="${sessao.status}"
+                          th:classappend="${sessao.status == 'CRIADO'} ? 'status-criado' : (${sessao.status == 'EM_EXECUCAO'} ? 'status-execucao' : 'status-finalizado')">
+                    </span>
+                </td>
+                <td th:text="${#dates.format(sessao.dataHoraCriacao, 'dd/MM/yyyy HH:mm')}">Data</td>
+                <td class="actions">
+                    <a th:href="@{/admin/sessoes/{sessaoId}/bugs(sessaoId=${sessao.id})}" class="btn btn-primary" th:text="#{common.button.details}">Ver Detalhes</a>
+                    <a th:href="@{/admin/sessoes/excluir/{id}(id=${sessao.id})}" class="btn btn-danger"
+                       th:onclick="'return confirm(\'' + #{common.confirm_delete_session} + '\');'" th:text="#{common.button.delete}">Excluir</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${listaSessoes.isEmpty()}" style="text-align: center; margin-top: 20px;">
+            <p>Nenhuma sessão de teste foi criada para este projeto ainda.</p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a th:href="@{/admin/projetos}" class="btn btn-secondary">Voltar para a Lista de Projetos</a>
+        </div>
+    </div>
+</div>
+</html>

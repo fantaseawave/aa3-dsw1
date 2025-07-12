@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:replace="~{admin/layout :: layout(pageTitle=#{admin.dashboard.title}, currentPage='dashboard', content=~{:: .main-content})}">
+  <div class="main-content">
+    <header class="header">
+      <h1 th:text="#{admin.dashboard.title}">Dashboard do Administrador</h1>
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+      </form>
+    </header>
+
+    <p class="welcome-message" th:text="#{admin.dashboard.welcome}">Bem-vindo(a) ao painel de administração.</p>
+
+    <div class="dashboard-widgets">
+      <div class="widget">
+        <h3 th:text="#{admin.dashboard.quick_actions}">Ações Rápidas</h3>
+        <ul class="action-list">
+          <li>
+            <a th:href="@{/admin/usuarios}" class="btn orkut-btn" th:text="#{admin.dashboard.link.view_all_users}">
+              Ver todos os usuários
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</html>

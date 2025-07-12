@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{admin/layout :: layout(
+    pageTitle=(${projeto.id == null || projeto.id == 0} ? #{form.project.new_title} : #{form.project.edit_title}),
+    currentPage='projetos',
+    content=~{:: .main-content}
+)}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1 th:text="${projeto.id == null || projeto.id == 0} ? #{form.project.header_new} : #{form.project.header_edit}"></h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div class="form-container">
+            <form action="#" th:action="@{/admin/projetos/salvar}" th:object="${projeto}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-group">
+                    <label for="nome" th:text="#{form.project.name}">Nome do Projeto:</label>
+                    <input type="text" th:field="*{nome}" id="nome" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="descricao" th:text="#{form.project.description}">Descrição:</label>
+                    <textarea th:field="*{descricao}" id="descricao" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="form-buttons">
+                    <a th:href="@{/admin/projetos}" class="btn btn-secondary" th:text="#{common.button.cancel}">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" th:text="#{common.button.save}">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

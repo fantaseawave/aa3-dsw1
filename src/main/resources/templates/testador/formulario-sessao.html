@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{testador/layout :: layout(
+    pageTitle=#{form.session.new_title},
+    currentPage='sessoes',
+    content=~{:: .main-content}
+)}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1 class="testador-title" th:text="#{form.session.new_title}">Nova Sessão de Teste</h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div class="form-container">
+            <form action="#" th:action="@{/testador/sessoes/salvar}" th:object="${sessaoTeste}" method="post">
+                <div class="form-group">
+                    <label for="projeto" th:text="#{form.session.project}">Projeto:</label>
+                    <select th:field="*{projeto}" id="projeto" class="form-control" required>
+                        <option value="" th:text="#{form.session.select_project}">Selecione um Projeto</option>
+                        <option th:each="p : ${listaProjetos}" th:value="${p.id}" th:text="${p.nome}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="estrategia" th:text="#{form.session.strategy}">Estratégia:</label>
+                    <select th:field="*{estrategia}" id="estrategia" class="form-control" required>
+                        <option value="" th:text="#{form.session.select_strategy}">Selecione uma Estratégia</option>
+                        <option th:each="e : ${listaEstrategias}" th:value="${e.id}" th:text="${e.nome}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tempoSessaoMinutos" th:text="#{tester.table.session_time}">Tempo da Sessão (minutos):</label>
+                    <input type="number" th:field="*{tempoSessaoMinutos}" id="tempoSessaoMinutos" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao" th:text="#{form.session.description}">Descrição (Objetivos):</label>
+                    <textarea th:field="*{descricao}" id="descricao" class="form-control" rows="4"></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <a th:href="@{/testador/sessoes}" class="btn btn-secondary" th:text="#{common.button.cancel}">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" th:text="#{common.button.save}">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

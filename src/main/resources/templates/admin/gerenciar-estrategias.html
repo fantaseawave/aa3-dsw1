@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{admin/layout :: layout(pageTitle=#{admin.strategies.title}, currentPage='estrategias', content=~{:: .main-content})}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1 th:text="#{admin.strategies.title}">Gerenciamento de Estratégias</h1>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
+            </form>
+        </header>
+
+        <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
+        <div th:if="${mensagemErro}" class="mensagem mensagem-erro" th:text="${mensagemErro}"></div>
+
+        <div class="form-buttons" style="text-align: left; margin-bottom: 20px; margin-left: 0;">
+            <a th:href="@{/admin/estrategias/nova}" class="btn btn-primary" th:text="#{admin.strategies.new}">Nova Estratégia</a>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{admin.table.id}">ID</th>
+                <th th:text="#{admin.table.image}">Imagem</th>
+                <th th:text="#{admin.table.name}">Nome</th>
+                <th th:text="#{admin.table.description}">Descrição</th>
+                <th th:text="#{common.actions}">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="estrategia : ${listaEstrategias}">
+                <td th:text="${estrategia.id}">1</td>
+                <td>
+                    <img th:if="${estrategia.imagemUrl != null}" th:src="@{${estrategia.imagemUrl}}" alt="Imagem" style="width: 100px; height: auto;"/>
+                </td>
+                <td th:text="${estrategia.nome}">Nome da Estratégia</td>
+                <td th:text="${#strings.abbreviate(estrategia.descricao, 150)}">Descrição da estratégia...</td>
+                <td class="actions">
+                    <a th:href="@{/admin/estrategias/editar/{id}(id=${estrategia.id})}" class="btn btn-warning" th:text="#{common.button.edit}">Editar</a>
+                    <a th:href="@{/admin/estrategias/excluir/{id}(id=${estrategia.id})}" class="btn btn-danger"
+                       th:onclick="'return confirm(\'' + #{common.confirm_delete} + '\');'" th:text="#{common.button.delete}">Excluir</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</html>
