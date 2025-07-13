@@ -9,12 +9,12 @@
     <div class="main-content">
         <header class="header">
             <h1 class="testador-title" th:text="#{form.session.new_title}">Nova Sessão de Teste</h1>
-            <form th:action="@{/logout}" method="post" style="display: inline;">
-                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
-            </form>
+
         </header>
 
         <div class="form-container">
+            <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
+            <div th:if="${mensagemErro}" class="mensagem mensagem-erro" th:text="${mensagemErro}"></div>
             <form action="#" th:action="@{/testador/sessoes/salvar}" th:object="${sessaoTeste}" method="post">
                 <div class="form-group">
                     <label for="projeto" th:text="#{form.session.project}">Projeto:</label>
@@ -34,7 +34,7 @@
 
                 <div class="form-group">
                     <label for="tempoSessaoMinutos" th:text="#{tester.table.session_time}">Tempo da Sessão (minutos):</label>
-                    <input type="number" th:field="*{tempoSessaoMinutos}" id="tempoSessaoMinutos" class="form-control" required>
+                    <input type="number" th:field="*{tempoSessaoMinutos}" id="tempoSessaoMinutos" class="form-control" required min="1">
                 </div>
 
                 <div class="form-group">

@@ -3,36 +3,39 @@
 <div th:replace="~{admin/layout :: layout(pageTitle=#{admin.bugs.list.title}, currentPage='projetos', content=~{:: .main-content})}">
     <div class="main-content">
         <header class="header">
-            <h1 th:text="#{bug.list.header(${sessao.id})}">Bugs da Sessão</h1>
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
-            </form>
+            <h1 th:text="#{bug.list.header(${sessao.id})}">Bugs da Sess\u00e3o</h1>
+
         </header>
 
         <table th:if="${!listaBugs.isEmpty()}">
             <thead>
             <tr>
                 <th th:text="#{admin.table.id}">ID</th>
-                <th th:text="#{admin.table.description}">Descrição</th>
+                <th th:text="#{admin.table.description}">Descri\u00e7\u00e3o</th>
                 <th th:text="#{bug.table.severity}">Severidade</th>
                 <th th:text="#{bug.table.report_date}">Data do Registro</th>
+                <th>Screenshot</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="bug : ${listaBugs}">
                 <td th:text="${bug.id}">1</td>
-                <td th:text="${bug.descricao}">Descrição do bug...</td>
+                <td th:text="${bug.descricao}">Descri\u00e7\u00e3o do bug...</td>
                 <td th:text="${bug.severidade}">ALTA</td>
                 <td th:text="${#dates.format(bug.dataRegistro, 'dd/MM/yyyy HH:mm')}">Data</td>
+                <td>
+                    <img th:if="${bug.screenshotUrl != null}" th:src="@{${bug.screenshotUrl}}" alt="Screenshot do Bug" style="max-width: 100px; height: auto; border-radius: 5px;"/>
+                    <span th:if="${bug.screenshotUrl == null}">N/A</span>
+                </td>
             </tr>
             </tbody>
         </table>
         <div th:if="${listaBugs.isEmpty()}" style="text-align: center; margin-top: 20px;">
-            <p th:text="#{bug.list.no_bugs}">Nenhum bug foi registrado para esta sessão.</p>
+            <p th:text="#{bug.list.no_bugs}">Nenhum bug foi registrado para esta sess\u00e3o.</p>
         </div>
 
         <div style="margin-top: 20px;">
-            <a th:href="@{/admin/projetos/{id}/sessoes(id=${sessao.projeto.id})}" class="btn btn-secondary" th:text="#{common.button.back_to_sessions}">Voltar para Sessões</a>
+            <a th:href="@{/admin/projetos/{id}/sessoes(id=${sessao.projeto.id})}" class="btn btn-secondary" th:text="#{common.button.back_to_sessions}">Voltar para Sess\u00f5es</a>
         </div>
     </div>
 </div>

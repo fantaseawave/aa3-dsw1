@@ -2,15 +2,15 @@ body {
     font-family: 'Trebuchet MS', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fdfcff;
-    color: #444;
+    background-color: hsl(270, 15%, 97%);
+    color: #333;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
 a {
-    color: #e570b7;
+    color: hsl(330, 80%, 65%);
     text-decoration: none;
 }
 
@@ -18,79 +18,105 @@ a:hover {
     text-decoration: underline;
 }
 
-.page-container {
+.main-wrapper {
     display: flex;
-    flex: 1;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
 }
 
-.sidebar {
-    width: 250px;
-    background: linear-gradient(to bottom, #f2e6f8, #ffffff);
-    color: #5a5a5a;
-    padding: 20px;
-    border-right: 2px solid #e6d8ee;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
-    border-radius: 0 10px 10px 0;
-}
-
-.sidebar h2 {
-    font-size: 1.5em;
-    text-align: center;
-    color: #e570b7;
-    margin-bottom: 20px;
-}
-
-.sidebar nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar nav ul li a {
-    display: block;
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 20px;
-    background-color: #f9f0fa;
-    color: #444;
-    transition: background 0.3s;
-}
-
-.sidebar nav ul li a:hover,
-.sidebar nav ul li a.active {
-    background-color: #e570b7;
+.app-header {
+    background: linear-gradient(to right, hsl(260, 60%, 45%), hsl(290, 80%, 75%));
+    padding: 15px 40px;
     color: white;
-}
-
-.sidebar .user-info {
-    margin-top: 30px;
-    font-size: 0.85em;
-    color: #777;
-    border-top: 1px dashed #ccc;
-    padding-top: 15px;
-}
-
-.main-content {
-    flex: 1;
-    padding: 40px;
-    background-color: #ffffff;
-}
-
-.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px dotted #e6d8ee;
-    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.header h1 {
-    color: #73bdf4;
-    font-size: 2em;
+.app-title {
     margin: 0;
+    font-size: 2em;
+    color: white;
+}
+
+.header-right-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.profile-picture-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    flex-shrink: 0;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85em;
+}
+
+.user-details p {
+    margin: 0;
+    line-height: 1.2;
+}
+
+.user-details strong {
+    color: white;
+}
+
+.lang-switcher {
+    display: flex;
+    gap: 10px;
+}
+
+.lang-switcher a {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.lang-switcher a:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.lang-switcher a.active-lang {
+    background-color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+}
+
+.lang-switcher img {
+    width: 24px;
+    height: auto;
+    border-radius: 3px;
 }
 
 .logout-btn {
-    background-color: #ff7272;
+    background-color: hsl(350, 70%, 60%);
     color: white !important;
     border-radius: 20px;
     padding: 10px 18px;
@@ -99,7 +125,31 @@ a:hover {
     text-decoration: none !important;
 }
 .logout-btn:hover {
-    background-color: #e05252;
+    background-color: hsl(350, 60%, 50%);
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px;
+    background-color: #ffffff;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px dotted hsl(270, 30%, 85%);
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: hsl(260, 60%, 45%);
+    font-size: 2em;
+    margin: 0;
 }
 
 .welcome-message {
@@ -118,30 +168,54 @@ a:hover {
     background-color: #fdfcff;
     padding: 20px;
     border-radius: 12px;
-    border: 1px solid #e6d8ee;
+    border: 1px solid hsl(270, 30%, 85%);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
 .widget h3 {
     margin-top: 0;
-    color: #e570b7;
+    color: hsl(260, 60%, 45%);
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.widget ul {
-    padding-left: 20px;
+.widget .button-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.widget .button-list li {
     margin-bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.widget ul li {
-    margin-bottom: 8px;
+.orkut-btn {
+    background-color: hsl(330, 80%, 65%);
+    color: white;
+    display: block;
+    width: 80%;
+    max-width: 300px;
+    box-sizing: border-box;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 1px 2px 4px hsla(330, 80%, 45%, 0.4);
 }
 
-.widget ul li a {
-    color: #73bdf4;
-}
-
-.widget ul li a:hover {
-    text-decoration: underline;
+.orkut-btn:hover {
+    background-color: hsl(330, 70%, 55%);
+    transform: translateY(-2px);
 }
 
 .mensagem {
@@ -167,7 +241,7 @@ a:hover {
     width: 600px;
     margin: 30px auto;
     padding: 30px 40px;
-    border: 1px solid #e6d8ee;
+    border: 1px solid hsl(270, 30%, 85%);
     border-radius: 12px;
     background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -175,7 +249,7 @@ a:hover {
 
 .form-container h1 {
     text-align: center;
-    color: #e570b7;
+    color: hsl(260, 60%, 45%);
     margin-bottom: 25px;
 }
 
@@ -219,30 +293,30 @@ a:hover {
 }
 
 .btn-primary {
-    background-color: #73bdf4;
+    background-color: hsl(330, 80%, 65%);
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #529dd4;
+    background-color: hsl(330, 70%, 55%);
 }
 
 .btn-secondary {
-    background-color: #e570b7;
+    background-color: hsl(260, 60%, 45%);
     color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #c85a9d;
+    background-color: hsl(260, 50%, 35%);
 }
 
 .btn-danger {
-    background-color: #ff7272;
+    background-color: hsl(0, 70%, 60%);
     color: white;
 }
 
 .btn-danger:hover {
-    background-color: #e05252;
+    background-color: hsl(0, 60%, 50%);
 }
 
 table {
@@ -253,20 +327,20 @@ table {
 }
 
 table th, table td {
-    border: 1px solid #e6d8ee;
+    border: 1px solid hsl(270, 30%, 85%);
     padding: 10px 12px;
     text-align: left;
     vertical-align: top;
 }
 
 table th {
-    background-color: #f2e6f8;
+    background-color: hsl(270, 40%, 90%);
     font-weight: bold;
     color: #444;
 }
 
 table tr:nth-child(even) {
-    background-color: #fcf7ff;
+    background-color: hsl(270, 20%, 98%);
 }
 
 .index-container {
@@ -280,7 +354,7 @@ table tr:nth-child(even) {
 }
 
 .index-container h1 {
-    color: #e570b7;
+    color: hsl(260, 60%, 45%);
     font-size: 2.8em;
     margin-bottom: 15px;
 }
@@ -291,72 +365,36 @@ table tr:nth-child(even) {
     margin-bottom: 30px;
 }
 
-.lang-switcher {
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.lang-btn {
-    background-color: #f2e6f8;
-    padding: 10px 20px;
-    border-radius: 20px;
-    color: #444;
-    border: 1px solid #ddd;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-}
-
-.lang-btn:hover {
-    background-color: #e570b7;
-    color: white;
-}
-
-.lang-btn.active-lang {
-    background-color: #73bdf4;
-    color: white;
-    pointer-events: none;
-}
-
 .footer {
     text-align: center;
     padding: 25px 20px;
-    background-color: #f2e6f8;
-    color: #a67ab7;
+    background-color: hsl(270, 40%, 90%);
+    color: hsl(260, 30%, 60%);
     font-size: 0.9em;
     margin-top: auto;
-    border-top: 2px dotted #e6d8ee;
+    border-top: 2px dotted hsl(270, 30%, 85%);
 }
 
-/* Botão estilo Orkut */
-.orkut-btn {
-    background-color: #e570b7;
+.status-criado {
+    background-color: #73bdf4;
     color: white;
-    display: block;
-    width: 100%;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 30px;
-    font-size: 1em;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 12px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.85em;
 }
 
-.orkut-btn:hover {
-    background-color: #c85a9d;
-    transform: translateY(-2px);
+.status-execucao {
+    background-color: #ffc107;
+    color: #333;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.85em;
 }
 
-/* Lista de ações em blocos */
-.action-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.status-finalizado {
+    background-color: #28a745;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.85em;
 }

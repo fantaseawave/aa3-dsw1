@@ -32,9 +32,14 @@ public class BugController {
     }
 
     @GetMapping("/bugs/novo")
-    public String mostrarFormularioNovoBug(@PathVariable("sessaoId") Integer sessaoId, Model model) {
+    public String mostrarFormularioNovoBug(@PathVariable("sessaoId") Integer sessaoId, Model model, RedirectAttributes redirectAttributes) {
         SessaoTeste sessao = sessaoTesteRepository.findById(sessaoId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de sessão inválido:" + sessaoId));
+
+        if ("FINALIZADO".equals(sessao.getStatus())) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível registrar bugs em uma sessão finalizada.");
+            return "redirect:/testador/sessoes"; // Redireciona de volta para a lista de sessões
+        }
 
         Bug bug = new Bug();
         bug.setSessaoTeste(sessao);
@@ -47,6 +52,11 @@ public class BugController {
     public String salvarBug(@PathVariable("sessaoId") Integer sessaoId, @ModelAttribute("bug") Bug bug, RedirectAttributes redirectAttributes) {
         SessaoTeste sessao = sessaoTesteRepository.findById(sessaoId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de sessão inválido:" + sessaoId));
+
+        if ("FINALIZADO".equals(sessao.getStatus())) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível registrar bugs em uma sessão finalizada.");
+            return "redirect:/testador/sessoes"; // Redireciona de volta para a lista de sessões
+        }
 
         bug.setSessaoTeste(sessao);
         bugRepository.save(bug);

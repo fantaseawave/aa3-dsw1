@@ -4,9 +4,6 @@
   <div class="main-content">
     <header class="header">
       <h1 th:text="#{admin.dashboard.title}">Dashboard do Administrador</h1>
-      <form th:action="@{/logout}" method="post">
-        <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
-      </form>
     </header>
 
     <p class="welcome-message" th:text="#{admin.dashboard.welcome}">Bem-vindo(a) ao painel de administração.</p>
@@ -14,10 +11,25 @@
     <div class="dashboard-widgets">
       <div class="widget">
         <h3 th:text="#{admin.dashboard.quick_actions}">Ações Rápidas</h3>
-        <ul class="action-list">
+        <ul class="action-list button-list">
           <li>
-            <a th:href="@{/admin/usuarios}" class="btn orkut-btn" th:text="#{admin.dashboard.link.view_all_users}">
-              Ver todos os usuários
+            <a th:href="@{/admin/usuarios}" class="btn orkut-btn" th:text="#{admin.sidebar.manage_users}">
+              Gerenciar Usuários
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/admin/projetos}" class="btn orkut-btn" th:text="#{admin.sidebar.manage_projects}">
+              Gerenciar Projetos
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/admin/estrategias}" class="btn orkut-btn" th:text="#{admin.sidebar.manage_strategies}">
+              Gerenciar Estratégias
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/admin/sessoes}" class="btn orkut-btn" th:text="#{admin.sidebar.manage_sessions}">
+              Gerenciar Sessões
             </a>
           </li>
         </ul>

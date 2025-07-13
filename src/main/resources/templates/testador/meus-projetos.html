@@ -4,9 +4,7 @@
     <div class="main-content">
         <header class="header">
             <h1 class="testador-title" th:text="#{tester.projects.title}">Meus Projetos</h1>
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
-            </form>
+
         </header>
 
         <div th:if="${listaProjetos.isEmpty()}">
@@ -33,6 +31,9 @@
             </tr>
             </tbody>
         </table>
+        <div class="form-buttons" style="text-align: left; margin-top: 20px; margin-left: 0;">
+            <a th:href="@{/testador/dashboard}" class="btn btn-secondary">Voltar para o Dashboard</a>
+        </div>
     </div>
 </div>
 </html>

@@ -24,6 +24,8 @@ public class Usuario implements Serializable {
     @Column(nullable = false)
     private String tipoPerfil;
 
+    private String profilePictureUrl;
+
     @OneToMany(mappedBy = "testador", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SessaoTeste> sessoesDeTeste;
 
@@ -68,6 +70,14 @@ public class Usuario implements Serializable {
 
     public void setTipoPerfil(String tipoPerfil) {
         this.tipoPerfil = tipoPerfil;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
     }
 
     public Set<SessaoTeste> getSessoesDeTeste() {

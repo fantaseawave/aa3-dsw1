@@ -18,7 +18,7 @@
             border-radius: 8px;
             font-size: 0.95em;
             cursor: pointer;
-            background-color: #f0f0f0;
+            background-color: hsl(270, 20%, 95%);
             color: #333;
             transition: background-color 0.3s ease, transform 0.2s ease;
             text-decoration: none;
@@ -28,12 +28,12 @@
         }
 
         .lang-btn:hover {
-            background-color: #d0d0d0;
+            background-color: hsl(270, 30%, 85%);
             transform: scale(1.05);
         }
 
         .active-lang {
-            background-color: #007BFF;
+            background-color: hsl(260, 60%, 45%);
             color: white;
             font-weight: bold;
         }
@@ -51,10 +51,10 @@
 
     <div class="lang-switcher">
         <a th:href="@{?lang=pt_BR}" class="lang-btn" th:classappend="${#locale.language == 'pt'} ? 'active-lang'">
-            🇧🇷 <span>Português</span>
+            <img th:src="@{/images/flags/br.png}" alt="Português" style="width: 20px; vertical-align: middle;"/> <span>Português</span>
         </a>
         <a th:href="@{?lang=en_US}" class="lang-btn" th:classappend="${#locale.language == 'en'} ? 'active-lang'">
-            🇺🇸 <span>English</span>
+            <img th:src="@{/images/flags/us.png}" alt="English" style="width: 20px; vertical-align: middle;"/> <span>English</span>
         </a>
     </div>
 </div>

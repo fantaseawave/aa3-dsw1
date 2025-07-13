@@ -5,9 +5,7 @@
     <div class="main-content">
         <header class="header">
             <h1 class="testador-title" th:text="#{tester.sessions.title}">Minhas Sessões de Teste</h1>
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
-            </form>
+
         </header>
 
         <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
@@ -25,6 +23,7 @@
                 <th th:text="#{tester.table.strategy}">Estratégia</th>
                 <th th:text="#{tester.table.status}">Status</th>
                 <th th:text="#{admin.table.creation_date}">Data Criação</th>
+                <th>Tempo Restante</th>
                 <th th:text="#{common.actions}">Ações</th>
             </tr>
             </thead>
@@ -32,13 +31,28 @@
             <tr th:each="sessao : ${listaSessoes}">
                 <td th:text="${sessao.id}">1</td>
                 <td th:text="${sessao.projeto.nome}">Nome do Projeto</td>
-                <td th:text="${sessao.estrategia.nome}">Nome da Estratégia</td>
+                <td>
+                    <a th:href="@{/estrategias/{id}(id=${sessao.estrategia.id})}" th:text="${sessao.estrategia.nome}">Nome da Estratégia</a>
+                </td>
                 <td>
                         <span th:text="${sessao.status == 'CRIADO'} ? #{tester.sessions.status.created} : (${sessao.status == 'EM_EXECUCAO'} ? #{tester.sessions.status.running} : #{tester.sessions.status.finished})"
                               th:classappend="${sessao.status == 'CRIADO'} ? 'status-criado' : (${sessao.status == 'EM_EXECUCAO'} ? 'status-execucao' : 'status-finalizado')">
                         </span>
                 </td>
                 <td th:text="${#dates.format(sessao.dataHoraCriacao, 'dd/MM/yyyy HH:mm')}">Data</td>
+                <td>
+                    <span th:if="${sessao.status == 'EM_EXECUCAO'}" class="session-timer"
+                          th:data-start-time="${sessao.dataHoraInicio.time}"
+                          th:data-session-duration="${sessao.tempoSessaoMinutos}">
+                        00:00:00
+                    </span>
+                    <span th:if="${sessao.status == 'FINALIZADO'}">
+                        Sessão Finalizada
+                    </span>
+                    <span th:if="${sessao.status == 'CRIADO'}">
+                        Não Iniciado
+                    </span>
+                </td>
                 <td class="actions">
                     <a th:if="${sessao.status == 'CRIADO'}" th:href="@{/testador/sessoes/iniciar/{id}(id=${sessao.id})}" class="btn btn-primary" th:text="#{tester.sessions.action.start}">Iniciar</a>
                     <a th:if="${sessao.status == 'EM_EXECUCAO'}" th:href="@{/testador/sessoes/finalizar/{id}(id=${sessao.id})}" class="btn btn-danger" th:text="#{tester.sessions.action.finish}">Finalizar</a>
@@ -51,6 +65,44 @@
         <div th:if="${listaSessoes.isEmpty()}">
             <p>Você ainda não criou nenhuma sessão de teste.</p>
         </div>
+        <div class="form-buttons" style="text-align: left; margin-top: 20px; margin-left: 0;">
+            <a th:href="@{/testador/dashboard}" class="btn btn-secondary">Voltar para o Dashboard</a>
+        </div>
     </div>
 </div>
+
+<script>
+    function updateTimers() {
+        document.querySelectorAll('.session-timer').forEach(function(timerElement) {
+            const startTime = parseInt(timerElement.dataset.startTime);
+            const sessionDurationMinutes = parseInt(timerElement.dataset.sessionDuration);
+            const currentTime = new Date().getTime();
+
+            const totalSessionMillis = sessionDurationMinutes * 60 * 1000;
+            const elapsedTime = currentTime - startTime;
+            let remainingTime = totalSessionMillis - elapsedTime;
+
+            let displayTime;
+            if (remainingTime <= 0) {
+                displayTime = "00:00:00 - Finalizado";
+            } else {
+                const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                const formatTime = (value) => value < 10 ? '0' + value : value;
+
+                displayTime =
+                    formatTime(hours) + ':' +
+                    formatTime(minutes) + ':' +
+                    formatTime(seconds);
+            }
+            timerElement.textContent = displayTime;
+        });
+    }
+
+    setInterval(updateTimers, 1000);
+    updateTimers();
+</script>
+
 </html>

@@ -11,12 +11,13 @@ import com.gametester.repository.SessaoTesteRepository;
 import com.gametester.repository.UsuarioRepository;
 import com.gametester.service.FileStorageService;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,23 +45,43 @@ public class AdminController {
         this.fileStorageService = fileStorageService;
     }
 
+    private void addAuthenticatedUserToModel(Model model, Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName();
+            Usuario usuarioLogado = usuarioRepository.findByEmail(email).orElse(null);
+            model.addAttribute("usuarioLogado", usuarioLogado);
+        }
+    }
+
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         return "admin/dashboard";
     }
 
     @GetMapping("/usuarios")
-    public String gerenciarUsuarios(Model model) {
+    public String gerenciarUsuarios(Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "admin/gerenciar-usuarios";
     }
 
+    @GetMapping("/usuarios/novo")
+    public String mostrarFormularioNovoUsuario(Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
+        model.addAttribute("usuario", new Usuario());
+        return "admin/formulario-usuario";
+    }
+
     @PostMapping("/usuarios/salvar")
-    public String salvarUsuario(@ModelAttribute("usuario") Usuario usuarioDoFormulario, RedirectAttributes redirectAttributes) {
+    public String salvarUsuario(@ModelAttribute("usuario") Usuario usuarioDoFormulario,
+                                @RequestParam(value = "profilePictureFile", required = false) MultipartFile profilePictureFile,
+                                RedirectAttributes redirectAttributes) {
+
         Optional<Usuario> outroUsuarioComEmail = usuarioRepository.findByEmail(usuarioDoFormulario.getEmail());
         if (outroUsuarioComEmail.isPresent() && outroUsuarioComEmail.get().getId() != usuarioDoFormulario.getId()) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Erro: O e-mail '" + usuarioDoFormulario.getEmail() + "' já está em uso por outro usuário.");
-            return "redirect:/admin/usuarios";
+            return "redirect:/admin/usuarios/novo";
         }
 
         if (usuarioDoFormulario.getId() != 0) {
@@ -73,9 +94,26 @@ public class AdminController {
                 usuarioDoBanco.setSenha(passwordEncoder.encode(usuarioDoFormulario.getSenha()));
             }
 
+            if (profilePictureFile != null && !profilePictureFile.isEmpty()) {
+                String nomeDoFicheiro = fileStorageService.storeFile(profilePictureFile);
+                usuarioDoBanco.setProfilePictureUrl("/uploads/" + nomeDoFicheiro);
+            } else if (usuarioDoFormulario.getProfilePictureUrl() != null && usuarioDoFormulario.getProfilePictureUrl().isEmpty()) {
+                usuarioDoBanco.setProfilePictureUrl(null);
+            }
+
             usuarioRepository.save(usuarioDoBanco);
         } else {
+            if (usuarioDoFormulario.getSenha() == null || usuarioDoFormulario.getSenha().isEmpty()) {
+                redirectAttributes.addFlashAttribute("mensagemErro", "Erro: A senha é obrigatória para novos usuários.");
+                return "redirect:/admin/usuarios/novo";
+            }
             usuarioDoFormulario.setSenha(passwordEncoder.encode(usuarioDoFormulario.getSenha()));
+
+            if (profilePictureFile != null && !profilePictureFile.isEmpty()) {
+                String nomeDoFicheiro = fileStorageService.storeFile(profilePictureFile);
+                usuarioDoFormulario.setProfilePictureUrl("/uploads/" + nomeDoFicheiro);
+            }
+
             usuarioRepository.save(usuarioDoFormulario);
         }
 
@@ -84,7 +122,8 @@ public class AdminController {
     }
 
     @GetMapping("/usuarios/editar/{id}")
-    public String mostrarFormularioEditarUsuario(@PathVariable("id") Integer id, Model model) {
+    public String mostrarFormularioEditarUsuario(@PathVariable("id") Integer id, Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de usuário inválido:" + id));
         usuario.setSenha("");
         model.addAttribute("usuario", usuario);
@@ -105,7 +144,8 @@ public class AdminController {
     }
 
     @GetMapping("/projetos")
-    public String gerenciarProjetos(Model model, @RequestParam(defaultValue = "nome") String sortField, @RequestParam(defaultValue = "asc") String sortDir) {
+    public String gerenciarProjetos(Model model, @RequestParam(defaultValue = "nome") String sortField, @RequestParam(defaultValue = "asc") String sortDir, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         Sort.Direction direction = sortDir.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortField);
 
@@ -133,13 +173,15 @@ public class AdminController {
     }
 
     @GetMapping("/projetos/novo")
-    public String mostrarFormularioNovoProjeto(Model model) {
+    public String mostrarFormularioNovoProjeto(Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         model.addAttribute("projeto", new Projeto());
         return "admin/formulario-projeto";
     }
 
     @GetMapping("/projetos/editar/{id}")
-    public String mostrarFormularioEditarProjeto(@PathVariable("id") Integer id, Model model) {
+    public String mostrarFormularioEditarProjeto(@PathVariable("id") Integer id, Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         Projeto projeto = projetoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + id));
         model.addAttribute("projeto", projeto);
         return "admin/formulario-projeto";
@@ -158,7 +200,8 @@ public class AdminController {
     }
 
     @GetMapping("/projetos/{projetoId}/membros")
-    public String gerenciarMembros(@PathVariable("projetoId") Integer projetoId, Model model) {
+    public String gerenciarMembros(@PathVariable("projetoId") Integer projetoId, Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         Projeto projeto = projetoRepository.findById(projetoId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + projetoId));
 
@@ -207,13 +250,15 @@ public class AdminController {
     }
 
     @GetMapping("/estrategias")
-    public String gerenciarEstrategias(Model model) {
+    public String gerenciarEstrategias(Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         model.addAttribute("listaEstrategias", estrategiaRepository.findAll());
         return "admin/gerenciar-estrategias";
     }
 
     @GetMapping("/estrategias/nova")
-    public String mostrarFormularioNovaEstrategia(Model model) {
+    public String mostrarFormularioNovaEstrategia(Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         model.addAttribute("estrategia", new Estrategia());
         return "admin/formulario-estrategia";
     }
@@ -244,7 +289,8 @@ public class AdminController {
     }
 
     @GetMapping("/estrategias/editar/{id}")
-    public String mostrarFormularioEditarEstrategia(@PathVariable("id") Integer id, Model model) {
+    public String mostrarFormularioEditarEstrategia(@PathVariable("id") Integer id, Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         Estrategia estrategia = estrategiaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de estratégia inválido:" + id));
         model.addAttribute("estrategia", estrategia);
         return "admin/formulario-estrategia";
@@ -264,7 +310,8 @@ public class AdminController {
     }
 
     @GetMapping("/projetos/{projetoId}/sessoes")
-    public String gerenciarSessoesDoProjeto(@PathVariable("projetoId") Integer projetoId, Model model) {
+    public String gerenciarSessoesDoProjeto(@PathVariable("projetoId") Integer projetoId, Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         Projeto projeto = projetoRepository.findById(projetoId)
                 .orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + projetoId));
 
@@ -275,14 +322,16 @@ public class AdminController {
     }
 
     @GetMapping("/sessoes/{sessaoId}/bugs")
-    public String visualizarBugsDaSessao(@PathVariable("sessaoId") Integer sessaoId, Model model) {
+    public String visualizarBugsDaSessao(@PathVariable("sessaoId") Integer sessaoId, Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         model.addAttribute("listaBugs", bugRepository.findBySessaoTesteId(sessaoId));
         model.addAttribute("sessao", sessaoTesteRepository.findById(sessaoId).orElse(null));
         return "admin/lista-bugs-admin";
     }
 
     @GetMapping("/sessoes")
-    public String gerenciarTodasSessoes(Model model) {
+    public String gerenciarTodasSessoes(Model model, Authentication authentication) {
+        addAuthenticatedUserToModel(model, authentication);
         model.addAttribute("listaSessoes", sessaoTesteRepository.findAll(Sort.by(Sort.Direction.DESC, "dataHoraCriacao")));
         return "admin/gerenciar-todas-sessoes";
     }

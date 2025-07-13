@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:replace="~{testador/layout :: layout(pageTitle=#{tester.dashboard.title}, currentPage='dashboard', content=~{:: .main-content})}">
     <div class="main-content">
         <header class="header">
             <h1 class="testador-title" th:text="#{tester.dashboard.title}">Dashboard do Testador</h1>
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
-            </form>
+
         </header>
         <p class="welcome-message" th:text="#{tester.dashboard.welcome}">Bem-vindo(a) ao seu painel.</p>
         <div class="dashboard-widgets">
             <div class="widget testador-widget">
                 <h3 th:text="#{tester.dashboard.quick_actions}">Ações Rápidas</h3>
-                <ul>
-                    <li><a th:href="@{/testador/projetos}" th:text="#{tester.dashboard.link.view_my_projects}">Ver meus projetos</a></li>
-                    <li><a th:href="@{/testador/sessoes/nova}" th:text="#{tester.dashboard.link.start_new_session}">Iniciar nova sessão de teste</a></li>
+                <ul class="action-list button-list">
+                    <li><a th:href="@{/testador/projetos}" class="btn orkut-btn" th:text="#{tester.sidebar.my_projects}">Meus Projetos</a></li>
+                    <li><a th:href="@{/testador/sessoes}" class="btn orkut-btn" th:text="#{tester.sidebar.my_sessions}">Minhas Sessões</a></li>
+                    <li><a th:href="@{/testador/estrategias}" class="btn orkut-btn" th:text="#{tester.sidebar.strategies}">Estratégia</a></li>
+                    <li><a th:href="@{/testador/sessoes/nova}" class="btn orkut-btn" th:text="#{tester.dashboard.link.start_new_session}">Iniciar nova sess\u00e3o de teste</a></li>
+                    <li><a th:href="@{/testador/meu-perfil}" class="btn orkut-btn">Meu Perfil</a></li>
                 </ul>
             </div>
         </div>

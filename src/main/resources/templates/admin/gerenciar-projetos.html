@@ -4,9 +4,6 @@
     <div class="main-content">
         <header class="header">
             <h1 th:text="#{admin.projects.title}">Gerenciamento de Projetos</h1>
-            <form th:action="@{/logout}" method="post" style="display: inline;">
-                <button type="submit" class="logout-btn" th:text="#{user.button.logout}">Logout</button>
-            </form>
         </header>
 
         <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
@@ -46,6 +43,9 @@
             </tr>
             </tbody>
         </table>
+        <div class="form-buttons" style="text-align: left; margin-top: 20px; margin-left: 0;">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">Voltar para o Dashboard</a>
+        </div>
     </div>
 </div>
 </html>

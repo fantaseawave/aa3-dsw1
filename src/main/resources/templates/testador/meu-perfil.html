@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{testador/layout :: layout(
+    pageTitle='Meu Perfil',
+    currentPage='meu-perfil',
+    content=~{:: .main-content}
+)}">
+
+    <div class="main-content">
+        <header class="header">
+            <h1>Meu Perfil</h1>
+
+        </header>
+
+        <div class="form-container">
+            <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
+            <div th:if="${mensagemErro}" class="mensagem mensagem-erro" th:text="${mensagemErro}"></div>
+            <form action="#" th:action="@{/testador/salvar-perfil}" th:object="${usuario}" method="post" enctype="multipart/form-data">
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{tipoPerfil}" /> <input type="hidden" th:field="*{profilePictureUrl}" /> <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" th:field="*{nome}" id="nome" class="form-control" required>
+            </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" th:field="*{email}" id="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Nova Senha (deixe em branco para não alterar):</label>
+                    <input type="password" th:field="*{senha}" id="senha" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="profilePictureFile">Foto de Perfil (deixe em branco para não alterar):</label>
+                    <input type="file" name="profilePictureFile" id="profilePictureFile" class="form-control">
+                    <div th:if="${usuario.profilePictureUrl != null}" style="margin-top: 10px;">
+                        <p>Foto Atual:</p>
+                        <img th:src="@{${usuario.profilePictureUrl}}" alt="Foto de Perfil" style="max-width: 150px; height: auto; border-radius: 5px;"/>
+                    </div>
+                </div>
+
+                <div class="form-buttons">
+                    <a th:href="@{/testador/dashboard}" class="btn btn-secondary">Voltar para o Dashboard</a>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>
