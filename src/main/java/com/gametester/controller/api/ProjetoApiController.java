@@ -64,10 +64,10 @@ public class ProjetoApiController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProjeto(@PathVariable int id) {
         if (projetoRepository.findById(id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto n\u00e3o encontrado.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto não encontrado.");
         }
         if (!sessaoTesteRepository.findByProjetoId(id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "N\u00e3o \u00e9 poss\u00edvel excluir o projeto, pois ele possui sess\u00f5es de teste associadas.");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Não é possível excluir o projeto, pois ele possui sessões de teste associadas.");
         }
         projetoRepository.deleteById(id);
     }
@@ -76,7 +76,7 @@ public class ProjetoApiController {
     @GetMapping("/{id}/membros")
     public Set<Usuario> getMembrosDoProjeto(@PathVariable int id) {
         Projeto projeto = projetoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto n\u00e3o encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto não encontrado."));
         return projeto.getMembros();
     }
 
@@ -84,12 +84,12 @@ public class ProjetoApiController {
     @ResponseStatus(HttpStatus.OK)
     public Projeto adicionarMembro(@PathVariable int id, @RequestBody Usuario membroDetails) {
         Projeto projeto = projetoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto n\u00e3o encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto não encontrado."));
         Usuario membro = usuarioRepository.findById(membroDetails.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usu\u00e1rio membro n\u00e3o encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário membro não encontrado."));
 
         if (projeto.getMembros().contains(membro)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Usu\u00e1rio j\u00e1 \u00e9 membro deste projeto.");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Usuário já é membro deste projeto.");
         }
 
         projeto.getMembros().add(membro);
@@ -100,12 +100,12 @@ public class ProjetoApiController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerMembro(@PathVariable int id, @PathVariable int usuarioId) {
         Projeto projeto = projetoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto n\u00e3o encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto não encontrado."));
         Usuario membro = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usu\u00e1rio membro n\u00e3o encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário membro não encontrado."));
 
         if (!projeto.getMembros().contains(membro)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usu\u00e1rio n\u00e3o \u00e9 membro deste projeto.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não é membro deste projeto.");
         }
 
         projeto.getMembros().remove(membro);
