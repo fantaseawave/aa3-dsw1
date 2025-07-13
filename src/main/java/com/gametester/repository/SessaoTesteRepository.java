@@ -12,4 +12,6 @@ public interface SessaoTesteRepository extends JpaRepository<SessaoTeste, Intege
     List<SessaoTeste> findByTestadorId(int testadorId);
 
     List<SessaoTeste> findByProjetoId(int projetoId);
+
+    List<SessaoTeste> findByEstrategiaId(int estrategiaId);
 }

@@ -1,5 +1,6 @@
 package com.gametester.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -20,7 +21,6 @@ public class Projeto implements Serializable {
     private String descricao;
 
     @Column(name = "data_criacao", updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Timestamp dataCriacao;
 
     @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -31,6 +31,7 @@ public class Projeto implements Serializable {
             name = "projeto_membro",
             joinColumns = @JoinColumn(name = "projeto_id"),
             inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+    @JsonIgnore
     private Set<Usuario> membros;
 
     public int getId() {
@@ -81,5 +82,3 @@ public class Projeto implements Serializable {
         this.membros = membros;
     }
 }
-
-

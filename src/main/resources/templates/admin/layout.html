@@ -3,7 +3,7 @@
       th:fragment="layout(pageTitle, currentPage, content)">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${pageTitle}">Painel de Administra\u00e7\u00e3o</title>
+    <title th:text="${pageTitle}">Painel de Administrador</title>
     <link rel="stylesheet" th:href="@{/css/estiloPrincipal.css}">
 </head>
 <body>
@@ -18,13 +18,15 @@
                     <img th:src="${usuarioLogado.profilePictureUrl != null} ? @{${usuarioLogado.profilePictureUrl}} : @{/images/default-avatar.png}" alt="Foto de Perfil" class="profile-picture"/>
                 </div>
                 <div class="user-details">
-                    <p><span th:text="#{user.info.logged_in_as}"></span>: <strong sec:authentication="name"></strong></p>
+                    <p th:if="${usuarioLogado != null}">
+                        <span th:text="#{common.hi}"></span>, <strong th:text="${usuarioLogado.nome}"></strong>!
+                    </p>                    <p><span th:text="#{user.info.logged_in_as}"></span>: <strong sec:authentication="name"></strong></p>
                     <p><span th:text="#{user.info.profile}"></span>: <span sec:authentication="authorities"></span></p>
                 </div>
             </div>
             <div class="lang-switcher">
                 <a th:href="@{?lang=pt_BR}" th:classappend="${#locale.language == 'pt'} ? 'active-lang' : ''">
-                    <img th:src="@{/images/flags/br.png}" alt="Portugu\u00eas" style="width: 20px; vertical-align: middle; margin-right: 5px;"/>
+                    <img th:src="@{/images/flags/br.png}" alt="Português" style="width: 20px; vertical-align: middle; margin-right: 5px;"/>
                 </a>
                 <a th:href="@{?lang=en_US}" th:classappend="${#locale.language == 'en'} ? 'active-lang' : ''">
                     <img th:src="@{/images/flags/us.png}" alt="English" style="width: 20px; vertical-align: middle; margin-right: 5px;"/>

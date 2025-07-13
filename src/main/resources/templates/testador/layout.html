@@ -18,6 +18,9 @@
                     <img th:src="${usuarioLogado.profilePictureUrl != null} ? @{${usuarioLogado.profilePictureUrl}} : @{/images/default-avatar.png}" alt="Foto de Perfil" class="profile-picture"/>
                 </div>
                 <div class="user-details">
+                    <p th:if="${usuarioLogado != null}">
+                        <span th:text="#{common.hi}"></span>, <strong th:text="${usuarioLogado.nome}"></strong>!
+                    </p>
                     <p><span th:text="#{user.info.logged_in_as}"></span>: <strong sec:authentication="name"></strong></p>
                     <p><span th:text="#{user.info.profile}"></span>: <span sec:authentication="authorities"></span></p>
                 </div>

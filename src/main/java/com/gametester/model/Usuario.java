@@ -1,6 +1,9 @@
 package com.gametester.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -16,9 +19,11 @@ public class Usuario implements Serializable {
     private String nome;
 
     @Column(unique = true, nullable = false)
+    @Email(message = "O e-mail deve ter um formato v\u00e1lido.")
     private String email;
 
     @Column(nullable = false)
+    @Size(min = 6, max = 100, message = "A senha deve ter entre 6 e 100 caracteres.") // Valida\u00e7\u00e3o de tamanho
     private String senha;
 
     @Column(nullable = false)
@@ -30,6 +35,7 @@ public class Usuario implements Serializable {
     private Set<SessaoTeste> sessoesDeTeste;
 
     @ManyToMany(mappedBy = "membros")
+    @JsonIgnore
     private Set<Projeto> projetos;
 
     public int getId() {

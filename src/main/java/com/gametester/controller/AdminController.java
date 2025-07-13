@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -78,14 +79,30 @@ public class AdminController {
                                 @RequestParam(value = "profilePictureFile", required = false) MultipartFile profilePictureFile,
                                 RedirectAttributes redirectAttributes) {
 
+        // Validação do tipoPerfil
+        Set<String> tiposPermitidos = Set.of("ADMINISTRADOR", "TESTADOR");
+        if (!tiposPermitidos.contains(usuarioDoFormulario.getTipoPerfil())) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro: O perfil de usu\u00e1rio fornecido \u00e9 inv\u00e1lido.");
+            // Redirecionar de volta para o formul\u00e1rio com o usu\u00e1rio preenchido, se poss\u00edvel
+            if (usuarioDoFormulario.getId() != 0) {
+                return "redirect:/admin/usuarios/editar/" + usuarioDoFormulario.getId();
+            } else {
+                return "redirect:/admin/usuarios/novo";
+            }
+        }
+
         Optional<Usuario> outroUsuarioComEmail = usuarioRepository.findByEmail(usuarioDoFormulario.getEmail());
         if (outroUsuarioComEmail.isPresent() && outroUsuarioComEmail.get().getId() != usuarioDoFormulario.getId()) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Erro: O e-mail '" + usuarioDoFormulario.getEmail() + "' já está em uso por outro usuário.");
-            return "redirect:/admin/usuarios/novo";
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro: O e-mail '" + usuarioDoFormulario.getEmail() + "' j\u00e1 est\u00e1 em uso por outro usu\u00e1rio.");
+            if (usuarioDoFormulario.getId() != 0) {
+                return "redirect:/admin/usuarios/editar/" + usuarioDoFormulario.getId();
+            } else {
+                return "redirect:/admin/usuarios/novo";
+            }
         }
 
         if (usuarioDoFormulario.getId() != 0) {
-            Usuario usuarioDoBanco = usuarioRepository.findById(usuarioDoFormulario.getId()).orElseThrow(() -> new IllegalArgumentException("ID de usuário inválido:" + usuarioDoFormulario.getId()));
+            Usuario usuarioDoBanco = usuarioRepository.findById(usuarioDoFormulario.getId()).orElseThrow(() -> new IllegalArgumentException("ID de usu\u00e1rio inv\u00e1lido:" + usuarioDoFormulario.getId()));
             usuarioDoBanco.setNome(usuarioDoFormulario.getNome());
             usuarioDoBanco.setEmail(usuarioDoFormulario.getEmail());
             usuarioDoBanco.setTipoPerfil(usuarioDoFormulario.getTipoPerfil());
@@ -104,7 +121,7 @@ public class AdminController {
             usuarioRepository.save(usuarioDoBanco);
         } else {
             if (usuarioDoFormulario.getSenha() == null || usuarioDoFormulario.getSenha().isEmpty()) {
-                redirectAttributes.addFlashAttribute("mensagemErro", "Erro: A senha é obrigatória para novos usuários.");
+                redirectAttributes.addFlashAttribute("mensagemErro", "Erro: A senha \u00e9 obrigat\u00f3ria para novos usu\u00e1rios.");
                 return "redirect:/admin/usuarios/novo";
             }
             usuarioDoFormulario.setSenha(passwordEncoder.encode(usuarioDoFormulario.getSenha()));
@@ -117,14 +134,14 @@ public class AdminController {
             usuarioRepository.save(usuarioDoFormulario);
         }
 
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário salvo com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Usu\u00e1rio salvo com sucesso!");
         return "redirect:/admin/usuarios";
     }
 
     @GetMapping("/usuarios/editar/{id}")
     public String mostrarFormularioEditarUsuario(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         addAuthenticatedUserToModel(model, authentication);
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de usuário inválido:" + id));
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de usu\u00e1rio inv\u00e1lido:" + id));
         usuario.setSenha("");
         model.addAttribute("usuario", usuario);
         return "admin/formulario-usuario";
@@ -134,12 +151,12 @@ public class AdminController {
     public String excluirUsuario(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         List<SessaoTeste> sessoes = sessaoTesteRepository.findByTestadorId(id);
         if (!sessoes.isEmpty()) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir o usuário, pois ele possui sessões de teste associadas.");
+            redirectAttributes.addFlashAttribute("mensagemErro", "N\u00e3o \u00e9 poss\u00edvel excluir o usu\u00e1rio, pois ele possui sess\u00f5es de teste associadas.");
             return "redirect:/admin/usuarios";
         }
 
         usuarioRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário excluído com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Usu\u00e1rio exclu\u00eddo com sucesso!");
         return "redirect:/admin/usuarios";
     }
 
@@ -160,7 +177,7 @@ public class AdminController {
     @PostMapping("/projetos/salvar")
     public String salvarProjeto(@ModelAttribute("projeto") Projeto projetoDoFormulario, RedirectAttributes redirectAttributes) {
         if (projetoDoFormulario.getId() != 0) {
-            Projeto projetoDoBanco = projetoRepository.findById(projetoDoFormulario.getId()).orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + projetoDoFormulario.getId()));
+            Projeto projetoDoBanco = projetoRepository.findById(projetoDoFormulario.getId()).orElseThrow(() -> new IllegalArgumentException("ID de projeto inv\u00e1lido:" + projetoDoFormulario.getId()));
             projetoDoBanco.setNome(projetoDoFormulario.getNome());
             projetoDoBanco.setDescricao(projetoDoFormulario.getDescricao());
             projetoRepository.save(projetoDoBanco);
@@ -182,7 +199,7 @@ public class AdminController {
     @GetMapping("/projetos/editar/{id}")
     public String mostrarFormularioEditarProjeto(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         addAuthenticatedUserToModel(model, authentication);
-        Projeto projeto = projetoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + id));
+        Projeto projeto = projetoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de projeto inv\u00e1lido:" + id));
         model.addAttribute("projeto", projeto);
         return "admin/formulario-projeto";
     }
@@ -190,12 +207,12 @@ public class AdminController {
     @GetMapping("/projetos/excluir/{id}")
     public String excluirProjeto(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         if (!sessaoTesteRepository.findByProjetoId(id).isEmpty()) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir o projeto, pois ele possui sessões de teste associadas.");
+            redirectAttributes.addFlashAttribute("mensagemErro", "N\u00e3o \u00e9 poss\u00edvel excluir o projeto, pois ele possui sess\u00f5es de teste associadas.");
             return "redirect:/admin/projetos";
         }
 
         projetoRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Projeto excluído com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Projeto exclu\u00eddo com sucesso!");
         return "redirect:/admin/projetos";
     }
 
@@ -203,7 +220,7 @@ public class AdminController {
     public String gerenciarMembros(@PathVariable("projetoId") Integer projetoId, Model model, Authentication authentication) {
         addAuthenticatedUserToModel(model, authentication);
         Projeto projeto = projetoRepository.findById(projetoId)
-                .orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + projetoId));
+                .orElseThrow(() -> new IllegalArgumentException("ID de projeto inv\u00e1lido:" + projetoId));
 
         List<Usuario> membrosAtuais = List.copyOf(projeto.getMembros());
         List<Usuario> todosUsuarios = usuarioRepository.findAll();
@@ -224,9 +241,9 @@ public class AdminController {
     @PostMapping("/projetos/adicionarMembro")
     public String adicionarMembro(@RequestParam("projetoId") Integer projetoId, @RequestParam("usuarioId") Integer usuarioId, RedirectAttributes redirectAttributes) {
         Projeto projeto = projetoRepository.findById(projetoId)
-                .orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + projetoId));
+                .orElseThrow(() -> new IllegalArgumentException("ID de projeto inv\u00e1lido:" + projetoId));
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("ID de usuário inválido:" + usuarioId));
+                .orElseThrow(() -> new IllegalArgumentException("ID de usu\u00e1rio inv\u00e1lido:" + usuarioId));
 
         projeto.getMembros().add(usuario);
         projetoRepository.save(projeto);
@@ -238,9 +255,9 @@ public class AdminController {
     @PostMapping("/projetos/removerMembro")
     public String removerMembro(@RequestParam("projetoId") Integer projetoId, @RequestParam("usuarioId") Integer usuarioId, RedirectAttributes redirectAttributes) {
         Projeto projeto = projetoRepository.findById(projetoId)
-                .orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + projetoId));
+                .orElseThrow(() -> new IllegalArgumentException("ID de projeto inv\u00e1lido:" + projetoId));
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("ID de usuário inválido:" + usuarioId));
+                .orElseThrow(() -> new IllegalArgumentException("ID de usu\u00e1rio inv\u00e1lido:" + usuarioId));
 
         projeto.getMembros().remove(usuario);
         projetoRepository.save(projeto);
@@ -272,7 +289,7 @@ public class AdminController {
         }
 
         if (estrategiaDoFormulario.getId() != 0) {
-            Estrategia estrategiaDoBanco = estrategiaRepository.findById(estrategiaDoFormulario.getId()).orElseThrow(() -> new IllegalArgumentException("ID de estratégia inválido:" + estrategiaDoFormulario.getId()));
+            Estrategia estrategiaDoBanco = estrategiaRepository.findById(estrategiaDoFormulario.getId()).orElseThrow(() -> new IllegalArgumentException("ID de estrat\u00e9gia inv\u00e1lido:" + estrategiaDoFormulario.getId()));
             estrategiaDoBanco.setNome(estrategiaDoFormulario.getNome());
             estrategiaDoBanco.setDescricao(estrategiaDoFormulario.getDescricao());
             estrategiaDoBanco.setExemplos(estrategiaDoFormulario.getExemplos());
@@ -284,28 +301,28 @@ public class AdminController {
         } else {
             estrategiaRepository.save(estrategiaDoFormulario);
         }
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Estratégia salva com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Estrat\u00e9gia salva com sucesso!");
         return "redirect:/admin/estrategias";
     }
 
     @GetMapping("/estrategias/editar/{id}")
     public String mostrarFormularioEditarEstrategia(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         addAuthenticatedUserToModel(model, authentication);
-        Estrategia estrategia = estrategiaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de estratégia inválido:" + id));
+        Estrategia estrategia = estrategiaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de estrat\u00e9gia inv\u00e1lido:" + id));
         model.addAttribute("estrategia", estrategia);
         return "admin/formulario-estrategia";
     }
 
     @GetMapping("/estrategias/excluir/{id}")
     public String excluirEstrategia(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
-        Estrategia estrategia = estrategiaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de estratégia inválido:" + id));
+        Estrategia estrategia = estrategiaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID de estrat\u00e9gia inv\u00e1lido:" + id));
         if (estrategia.getSessoesDeTeste() != null && !estrategia.getSessoesDeTeste().isEmpty()) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Não é possível excluir a estratégia, pois ela está em uso em sessões de teste.");
+            redirectAttributes.addFlashAttribute("mensagemErro", "N\u00e3o \u00e9 poss\u00edvel excluir a estrat\u00e9gia, pois ela est\u00e1 em uso em sess\u00f5es de teste.");
             return "redirect:/admin/estrategias";
         }
 
         estrategiaRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Estratégia excluída com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Estrat\u00e9gia exclu\u00edda com sucesso!");
         return "redirect:/admin/estrategias";
     }
 
@@ -313,7 +330,7 @@ public class AdminController {
     public String gerenciarSessoesDoProjeto(@PathVariable("projetoId") Integer projetoId, Model model, Authentication authentication) {
         addAuthenticatedUserToModel(model, authentication);
         Projeto projeto = projetoRepository.findById(projetoId)
-                .orElseThrow(() -> new IllegalArgumentException("ID de projeto inválido:" + projetoId));
+                .orElseThrow(() -> new IllegalArgumentException("ID de projeto inv\u00e1lido:" + projetoId));
 
         model.addAttribute("projeto", projeto);
         model.addAttribute("listaSessoes", sessaoTesteRepository.findByProjetoId(projetoId));
@@ -340,9 +357,9 @@ public class AdminController {
     public String excluirSessao(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             sessaoTesteRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("mensagemSucesso", "Sessão de teste excluída com sucesso!");
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Sess\u00e3o de teste exclu\u00edda com sucesso!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Não foi possível excluir a sessão de teste.");
+            redirectAttributes.addFlashAttribute("mensagemErro", "N\u00e3o foi poss\u00edvel excluir a sess\u00e3o de teste.");
         }
         return "redirect:/admin/sessoes";
     }

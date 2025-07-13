@@ -1,5 +1,6 @@
 package com.gametester.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -16,14 +17,17 @@ public class SessaoTeste implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projeto_id", nullable = false)
+    @JsonIgnore
     private Projeto projeto;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "testador_id", nullable = false)
+    @JsonIgnore
     private Usuario testador;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estrategia_id", nullable = false)
+    @JsonIgnore
     private Estrategia estrategia;
 
     private int tempoSessaoMinutos;
@@ -33,7 +37,6 @@ public class SessaoTeste implements Serializable {
     private String status;
 
     @Column(name = "data_hora_criacao", updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Timestamp dataHoraCriacao;
 
     private Timestamp dataHoraInicio;

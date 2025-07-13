@@ -18,10 +18,8 @@ public class SessionSchedulerService {
         this.sessaoTesteRepository = sessaoTesteRepository;
     }
 
-    @Scheduled(fixedRate = 60000) // Executa a cada 60 segundos (1 minuto)
+    @Scheduled(fixedRate = 60000)
     public void autoFinalizarSessoes() {
-        System.out.println("Scheduler de finalização de sessões sendo executado..."); // LINHA TEMPORÁRIA PARA DEBUG
-
         List<SessaoTeste> sessoesEmExecucao = sessaoTesteRepository.findAll()
                 .stream()
                 .filter(s -> "EM_EXECUCAO".equals(s.getStatus()))
@@ -36,7 +34,6 @@ public class SessionSchedulerService {
                 sessao.setStatus("FINALIZADO");
                 sessao.setDataHoraFim(new Timestamp(System.currentTimeMillis()));
                 sessaoTesteRepository.save(sessao);
-                System.out.println("Sessão ID " + sessao.getId() + " finalizada automaticamente."); // LINHA TEMPORÁRIA PARA DEBUG
             }
         }
     }
